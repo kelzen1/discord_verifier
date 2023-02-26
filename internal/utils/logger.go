@@ -28,6 +28,10 @@ func Logger() *logrus.Logger {
 		writer := io.MultiWriter(f, os.Stdout)
 		logger.SetOutput(writer)
 
+		logger.SetFormatter(&logrus.TextFormatter{
+			ForceColors: true,
+		})
+
 	})
 
 	return logger

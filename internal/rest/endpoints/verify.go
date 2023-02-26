@@ -1,11 +1,11 @@
 package endpoints
 
 import (
-	"Verifier/database"
-	restModels "Verifier/models/rest"
-	"Verifier/utils"
 	"bytes"
 	"encoding/json"
+	"github.com/yoonaowo/discord_verifier/internal/database"
+	restModels2 "github.com/yoonaowo/discord_verifier/internal/models/rest"
+	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
 	"io"
 	"net/http"
 )
@@ -13,16 +13,16 @@ import (
 func Verify(w http.ResponseWriter, r *http.Request) {
 
 	reqBody, _ := io.ReadAll(r.Body)
-	r.Body.Close() //  must close
+	r.Body.Close()
 	r.Body = io.NopCloser(bytes.NewBuffer(reqBody))
 
-	data := restModels.VerifyAnswer{}
+	data := restModels2.VerifyAnswer{}
 
 	defer func() {
 		if !data.Success {
 			marshaled, _ := json.Marshal(data)
 			w.WriteHeader(400)
-			w.Write(marshaled)
+			_, _ = w.Write(marshaled)
 		}
 	}()
 
@@ -41,12 +41,12 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utils.CompareJSONToStruct(bodyData, restModels.VerifyReceiver{}) {
-		data.Error = utils.ErrStructMismatch.Error()
+	if !utils2.CompareJSONToStruct(bodyData, restModels2.VerifyReceiver{}) {
+		data.Error = utils2.ErrStructMismatch.Error()
 		return
 	}
 
-	verifyRequest := &restModels.VerifyReceiver{}
+	verifyRequest := &restModels2.VerifyReceiver{}
 	_ = json.Unmarshal(reqBody, &verifyRequest)
 
 	db := database.Get()
@@ -59,5 +59,5 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	data.Success = true
 
 	marshaled, _ := json.Marshal(data)
-	w.Write(marshaled)
+	_, _ = w.Write(marshaled)
 }

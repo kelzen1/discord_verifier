@@ -7,8 +7,10 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o server
+RUN go build \
+          -ldflags '-w -extldflags "-static"' \
+          -o /bin/verifier \
+          cmd/verifier/main.go
 
-COPY main.go ./
-RUN go build -o /verifier
-CMD [ "/verifier" ]
+CMD [ "/bin/verifier" ]
+

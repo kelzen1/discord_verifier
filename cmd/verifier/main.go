@@ -1,10 +1,10 @@
 package main
 
 import (
-	"Verifier/database"
-	"Verifier/discord"
-	"Verifier/rest"
-	"Verifier/utils"
+	"github.com/yoonaowo/discord_verifier/internal/database"
+	"github.com/yoonaowo/discord_verifier/internal/discord"
+	"github.com/yoonaowo/discord_verifier/internal/rest"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 	"os"
 	"os/signal"
 	"syscall"

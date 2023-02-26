@@ -1,13 +1,13 @@
 package interactions
 
 import (
-	"Verifier/database"
-	"Verifier/models"
-	discordModels "Verifier/models/discord"
-	"Verifier/utils"
 	"context"
 	"database/sql"
 	"github.com/andersfylling/disgord"
+	"github.com/yoonaowo/discord_verifier/internal/database"
+	"github.com/yoonaowo/discord_verifier/internal/models"
+	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 )
 
 var (
@@ -57,7 +57,7 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 
 	answer := verifyFailed
 	defer func() {
-		discordModels.GetClient().SendInteractionResponse(context.Background(), interactionCreate, answer)
+		_ = discordModels.GetClient().SendInteractionResponse(context.Background(), interactionCreate, answer)
 	}()
 
 	if len(interactionCreate.Data.Options) == 0 {

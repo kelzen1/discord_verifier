@@ -1,4 +1,4 @@
-module Verifier
+module github.com/yoonaowo/discord_verifier
 
 go 1.20
 

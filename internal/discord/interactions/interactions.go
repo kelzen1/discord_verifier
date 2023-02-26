@@ -1,11 +1,11 @@
 package interactions
 
 import (
-	"Verifier/models"
-	discordModels "Verifier/models/discord"
-	"Verifier/utils"
 	"context"
 	"github.com/andersfylling/disgord"
+	"github.com/yoonaowo/discord_verifier/internal/models"
+	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
+	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
 	"os"
 	"sync"
 )
@@ -28,7 +28,7 @@ func GetInteraction(name string) (interactionData *models.Interaction, err error
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	err = utils.ErrInteractionNotFound
+	err = utils2.ErrInteractionNotFound
 
 	interaction, ok := mapInteractions[name]
 
@@ -55,7 +55,7 @@ func handle(session disgord.Session, interactionCreate *disgord.InteractionCreat
 	interaction, err := GetInteraction(interactionCreate.Data.Name)
 
 	if err != nil {
-		discordModels.GetClient().SendInteractionResponse(context.Background(), interactionCreate, failedResponse)
+		_ = discordModels.GetClient().SendInteractionResponse(context.Background(), interactionCreate, failedResponse)
 		return
 	}
 
@@ -72,13 +72,13 @@ func Setup(client *disgord.Client) {
 	GuildID, err := disgord.GetSnowflake(os.Getenv("DISCORD_GUILD"))
 
 	if err != nil {
-		utils.Logger().Panicln("get snowflake interactions ->", err)
+		utils2.Logger().Panicln("get snowflake interactions ->", err)
 		return
 	}
 
 	for _, interaction := range *interactions {
 		if err := client.ApplicationCommand(0).Guild(GuildID).Create(interaction.CommandDefinition); err != nil {
-			utils.Logger().Fatalf(err.Error())
+			utils2.Logger().Fatalf(err.Error())
 		}
 	}
 

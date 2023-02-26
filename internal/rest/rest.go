@@ -1,10 +1,10 @@
 package rest
 
 import (
-	"Verifier/rest/endpoints"
-	"Verifier/rest/middlewares"
-	"Verifier/utils"
 	"github.com/gorilla/mux"
+	"github.com/yoonaowo/discord_verifier/internal/rest/endpoints"
+	"github.com/yoonaowo/discord_verifier/internal/rest/middlewares"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 	"net/http"
 )
 
