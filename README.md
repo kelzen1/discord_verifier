@@ -52,7 +52,9 @@ Discord server id
 
 #### 3. Edit passwords and etc in docker-compose.yml
 
-#### 4. `docker compose up -d`
+#### 4. `docker compose up -d` (PHPMyAdmin will be installed too)
+
+#### 5. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
 
 #### REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint\cURL example: 
 ```BASH
