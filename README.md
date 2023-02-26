@@ -54,5 +54,5 @@ Discord server id
 
 #### 4. `docker compose up -d`
 
-№ Get Role
+# Get Role
 Just use interaction `/role` in any discord channel on ur server
