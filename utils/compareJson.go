@@ -43,7 +43,7 @@ func getFields(Struct any) (retVal map[string]interface{}) {
 	return
 }
 
-func CompareJSONToStruct(mapped map[string]interface{}, Struct any) (retVal bool) { // pasted straight from the stackoverflow
+func CompareJSONToStruct(mapped map[string]interface{}, Struct any) (retVal bool) {
 
 	structFields := getFields(Struct)
 
