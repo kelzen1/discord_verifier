@@ -54,5 +54,16 @@ Discord server id
 
 #### 4. `docker compose up -d`
 
+#### REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint\cURL example: 
+```BASH
+curl --location 'http://localhost:40002/verify' \
+--header 'Content-Type: application/json' \
+--data '{
+    "signature": "9ce8d820f543c5a68f214da51cdad84b",
+    "username": "testuser",
+    "role":"release"
+}'
+```
+
 # Get Role
 Just use interaction `/role` in any discord channel on ur server
