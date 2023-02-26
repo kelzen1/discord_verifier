@@ -1,15 +1,21 @@
 package database
 
 import (
+	databaseTables "Verifier/models/database"
+	restModels "Verifier/models/rest"
+	"Verifier/utils"
 	"database/sql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 	"os"
 	"sync"
 )
 
-var dbPtr *gorm.DB
+type T struct {
+	raw *gorm.DB
+}
+
+var dbStruct T
 
 var (
 	mutex sync.Mutex
@@ -17,59 +23,94 @@ var (
 )
 
 func initOnce() {
-	log.Println("[database] start")
+	utils.Logger().Println("connecting to database")
 
 	databaseUrl := os.Getenv("DB_URL")
 
 	db, err := gorm.Open(mysql.Open(databaseUrl), &gorm.Config{})
-	dbPtr = db
+	dbStruct.raw = db
 
 	if err != nil {
-		log.Panicln("[database] cannot connect:", err)
+		utils.Logger().Panicln("cannot connect to database:", err)
 		return
 	}
 
-	log.Println("[database] connected")
+	utils.Logger().Println("database connected")
 }
 
 // Get singleton
-func Get() *gorm.DB {
+func Get() T {
 
 	mutex.Lock()
 	defer mutex.Unlock()
 
 	once.Do(initOnce)
 
-	return dbPtr
+	return dbStruct
 }
 
-func scan[T any](query *gorm.DB) (result []T, err error) {
-	result = []T{}
+func (dbT *T) GetRoleID(roleName string) (string, error) {
+	db := dbT.raw.Table("roles")
 
-	rows, err := query.Rows()
+	roleData := databaseTables.Roles{}
+	res := db.Where("name = ?", roleName).Limit(1).Find(&roleData)
 
-	if err != nil {
-		return
-	}
+	err := res.Error
 
-	for rows.Next() {
-		var tmp T
-		err = query.ScanRows(rows, &tmp)
-
-		if err != nil {
-			return
-		}
-
-		result = append(result, tmp)
-	}
-
-	if len(result) == 0 {
+	if err == nil && res.RowsAffected == 0 {
 		err = sql.ErrNoRows
 	}
 
-	return
+	return roleData.Role, err
 }
 
-func ScanMany[T any](query *gorm.DB) (result []T, err error) {
-	return scan[T](query)
+func (dbT *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
+	var dest databaseTables.Codes
+	query := dbT.raw.Table("codes").Where("code = ?", code)
+	res := query.Limit(1).Find(&dest)
+
+	err := res.Error
+	if err == nil && res.RowsAffected == 0 {
+		err = sql.ErrNoRows
+	}
+
+	return dest, err
+}
+
+func (dbT *T) CreateOrGetCode(receiver *restModels.VerifyReceiver) (string, error) {
+	db := dbT.raw.Table("codes")
+
+	code := utils.HashMD5(receiver.Username + receiver.Role)
+
+	newCodeData := &databaseTables.Codes{
+		Code:       code,
+		Username:   receiver.Username,
+		AssignRole: receiver.Role,
+	}
+
+	db.Where("code = ?", code).FirstOrCreate(&newCodeData)
+
+	return code, nil
+}
+
+func (dbT *T) SetUsed(UserID string, codeData databaseTables.Codes) {
+	db := dbT.raw
+
+	updateData := map[string]interface{}{
+		"used":    true,
+		"used_by": UserID,
+	}
+
+	db.Table("codes").Where("code = ?", codeData.Code).Updates(updateData)
+
+	if codeData.Username == "unknown" {
+		return
+	}
+
+	db = dbT.raw.Table("users")
+
+	db.Create(&databaseTables.Users{
+		Username:  codeData.Username,
+		DiscordID: UserID,
+	})
 }

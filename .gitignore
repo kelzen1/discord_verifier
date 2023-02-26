@@ -5,4 +5,7 @@
 *.dylib
 *.test
 *.out
+*.tar
+*.tar.gz
 go.work
+verifier.log

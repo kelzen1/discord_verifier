@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -55,7 +54,6 @@ func CheckSignature(next http.Handler) http.Handler {
 		hashString = utils.HashMD5(hashString)
 
 		if hashString != signature {
-			log.Println(hashString)
 			answer.Error = "wrong_signature"
 			return
 		}

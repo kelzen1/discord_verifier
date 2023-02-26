@@ -1,7 +1,7 @@
 package endpoints
 
 import (
-	"Verifier/database/actions"
+	"Verifier/database"
 	restModels "Verifier/models/rest"
 	"Verifier/utils"
 	"bytes"
@@ -49,7 +49,8 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	verifyRequest := &restModels.VerifyReceiver{}
 	_ = json.Unmarshal(reqBody, &verifyRequest)
 
-	data.Code, err = actions.CreateOrGetCode(verifyRequest)
+	db := database.Get()
+	data.Code, err = db.CreateOrGetCode(verifyRequest)
 
 	if err != nil {
 		return

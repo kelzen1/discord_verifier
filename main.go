@@ -4,12 +4,15 @@ import (
 	"Verifier/database"
 	"Verifier/discord"
 	"Verifier/rest"
+	"Verifier/utils"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func main() {
+
+	defer utils.ShutdownLogger()
 
 	go rest.Init()
 	go database.Get()

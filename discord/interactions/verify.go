@@ -2,14 +2,12 @@ package interactions
 
 import (
 	"Verifier/database"
-	"Verifier/database/actions"
 	"Verifier/models"
-	databaseTables "Verifier/models/database"
 	discordModels "Verifier/models/discord"
+	"Verifier/utils"
 	"context"
 	"database/sql"
 	"github.com/andersfylling/disgord"
-	"log"
 )
 
 var (
@@ -63,23 +61,36 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	}()
 
 	if len(interactionCreate.Data.Options) == 0 {
-		verifyFailed.Data.Embeds[0].Description = "Bad Arguments!"
+		answer.Data.Embeds[0].Description = "Bad Arguments!"
 		return
 	}
 
+	db := database.Get()
+
 	code := interactionCreate.Data.Options[0].Value.(string)
-	codeData, err := actions.GetCodeInfo(code)
+	codeData, err := db.GetCodeInfo(code)
 	UserID := interactionCreate.Member.UserID.String()
-	if err != nil || (codeData.Used && codeData.UsedBy != UserID) {
-		verifyFailed.Data.Embeds[0].Description = "Code already used!"
+
+	if err == sql.ErrNoRows {
+		answer.Data.Embeds[0].Description = "Code not found :("
+		return
+	}
+
+	if codeData.Used && codeData.UsedBy != UserID {
+		answer.Data.Embeds[0].Description = "Code already used :("
 		return
 	}
 
 	client := discordModels.GetClient()
 
-	assignRole, err := actions.GetRoleID(codeData.AssignRole)
+	assignRole, err := db.GetRoleID(codeData.AssignRole)
 
 	if err != nil {
+
+		if err == sql.ErrNoRows {
+			answer.Data.Embeds[0].Description = "Role not found in database. Please contact administrator!"
+		}
+
 		return
 	}
 
@@ -87,36 +98,11 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 
 	err = client.Guild(interactionCreate.GuildID).Member(interactionCreate.Member.UserID).AddRole(assignRoleSnowflake)
 	if err != nil {
-		log.Println("failed to assign role ->", err)
-		verifyFailed.Data.Embeds[0].Description = "Failed to assign role :("
+		utils.Logger().Println("failed to assign role ->", err)
+		answer.Data.Embeds[0].Description = "Failed to assign role :("
 		return
 	}
 
 	answer = verifyDone
-
-	db := database.Get()
-
-	updateData := map[string]interface{}{
-		"used":    true,
-		"used_by": UserID,
-	}
-
-	db.Table("codes").Where("code = ?", codeData.Code).Updates(updateData)
-
-	if codeData.Username == "unknown" {
-		return
-	}
-
-	db = db.Table("users")
-
-	findQuery := db.Where("username = ? AND discord_id = ?", codeData.Username, UserID)
-
-	_, err = database.ScanMany[databaseTables.Users](findQuery)
-
-	if err == sql.ErrNoRows {
-		db.Create(&databaseTables.Users{
-			Username:  codeData.Username,
-			DiscordID: UserID,
-		})
-	}
+	db.SetUsed(UserID, codeData)
 }

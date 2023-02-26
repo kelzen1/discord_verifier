@@ -6,7 +6,6 @@ import (
 	"Verifier/utils"
 	"context"
 	"github.com/andersfylling/disgord"
-	"log"
 	"os"
 	"sync"
 )
@@ -73,13 +72,13 @@ func Setup(client *disgord.Client) {
 	GuildID, err := disgord.GetSnowflake(os.Getenv("DISCORD_GUILD"))
 
 	if err != nil {
-		log.Panicln("get snowflake interactions ->", err)
+		utils.Logger().Panicln("get snowflake interactions ->", err)
 		return
 	}
 
 	for _, interaction := range *interactions {
 		if err := client.ApplicationCommand(0).Guild(GuildID).Create(interaction.CommandDefinition); err != nil {
-			log.Fatal(err)
+			utils.Logger().Fatalf(err.Error())
 		}
 	}
 

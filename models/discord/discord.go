@@ -1,8 +1,8 @@
 package discordModels
 
 import (
+	"Verifier/utils"
 	"github.com/andersfylling/disgord"
-	"github.com/sirupsen/logrus"
 	"os"
 	"sync"
 )
@@ -17,7 +17,7 @@ func GetClient() *disgord.Client {
 	once.Do(func() {
 		client = disgord.New(disgord.Config{
 			BotToken: os.Getenv("DISCORD_TOKEN"),
-			Logger:   logrus.New(),
+			Logger:   utils.Logger(),
 		})
 	})
 
