@@ -1,4 +1,4 @@
-name: CI
+name: Staticcheck
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  ci:
+  staticcheck:
     strategy:
       fail-fast: false
       matrix:
