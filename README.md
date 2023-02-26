@@ -53,3 +53,6 @@ Discord server id
 #### 3. Edit passwords and etc in docker-compose.yml
 
 #### 4. `docker compose up -d`
+
+№ Get Role
+Just use interaction `/role` in any discord channel on ur server
