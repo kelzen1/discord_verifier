@@ -1,12 +1,14 @@
 package database
 
 import (
-	"database/sql"
 	databaseTables2 "github.com/yoonaowo/discord_verifier/internal/models/database"
 	restModels "github.com/yoonaowo/discord_verifier/internal/models/rest"
 	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+
+	"database/sql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
 	"os"
 	"sync"
 )

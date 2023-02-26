@@ -1,11 +1,12 @@
 package endpoints
 
 import (
-	"bytes"
-	"encoding/json"
 	"github.com/yoonaowo/discord_verifier/internal/database"
 	restModels2 "github.com/yoonaowo/discord_verifier/internal/models/rest"
 	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+
+	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 )

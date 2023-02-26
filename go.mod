@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/andersfylling/disgord v0.36.1
-	github.com/gorilla/mux v1.8.0
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/sirupsen/logrus v1.9.0
 	gorm.io/driver/mysql v1.4.7
 	gorm.io/gorm v1.24.5

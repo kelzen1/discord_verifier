@@ -2,6 +2,7 @@ package discord
 
 import (
 	"github.com/andersfylling/disgord"
+
 	"github.com/yoonaowo/discord_verifier/internal/discord/interactions"
 	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
 	"github.com/yoonaowo/discord_verifier/internal/utils"

@@ -3,7 +3,9 @@ package interactions
 import (
 	"context"
 	"database/sql"
+
 	"github.com/andersfylling/disgord"
+
 	"github.com/yoonaowo/discord_verifier/internal/database"
 	"github.com/yoonaowo/discord_verifier/internal/models"
 	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"

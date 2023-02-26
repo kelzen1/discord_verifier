@@ -1,10 +1,11 @@
 package middlewares
 
 import (
-	"bytes"
-	"encoding/json"
 	restModels "github.com/yoonaowo/discord_verifier/internal/models/rest"
 	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+
+	"bytes"
+	"encoding/json"
 	"io"
 	"net/http"
 )

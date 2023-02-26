@@ -2,7 +2,9 @@ package discordModels
 
 import (
 	"github.com/andersfylling/disgord"
+
 	"github.com/yoonaowo/discord_verifier/internal/utils"
+
 	"os"
 	"sync"
 )

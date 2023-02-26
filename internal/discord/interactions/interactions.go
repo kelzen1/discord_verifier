@@ -1,11 +1,13 @@
 package interactions
 
 import (
-	"context"
 	"github.com/andersfylling/disgord"
+
 	"github.com/yoonaowo/discord_verifier/internal/models"
 	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
 	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+
+	"context"
 	"os"
 	"sync"
 )
