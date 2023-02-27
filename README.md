@@ -78,4 +78,7 @@ curl --location 'http://localhost:40002/verify' \
 
 # Get Role
 
-Just use interaction `/role` in any discord channel on ur server
+Just use interaction `/verify` in any discord channel on ur server
+
+![image](https://user-images.githubusercontent.com/126272940/221445981-f522d105-218b-4fd4-a40e-d5b54656386c.png)
+
