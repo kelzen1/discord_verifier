@@ -1,0 +1,15 @@
+{
+  "ERROR": "Error",
+  "SOMETHING_WENT_WRONG": "Aww, something went wrong!~",
+  "UNK_ERROR": "Unknown error!",
+  "VERIFY_DEF_DESCRIPTION": "Get User Role",
+  "VERIFY_DEF_OPT_NAME": "code",
+  "VERIFY_DEF_OPT_DESCRIPTION": "Verify Code",
+  "VERIFY_DONE_TITLE": "Done!",
+  "VERIFY_DONE_DESCRIPTION": "Role given!",
+  "BAD_ARGUMENTS": "Bad arguments!",
+  "CODE_NOT_FOUND": "Code not found :(",
+  "CODE_ALREADY_USED": "Code already used :(",
+  "ROLE_NOT_FOUND_CONTACT_ADMIN": "Role not found in database. Please contact administrator!",
+  "FAILED_TO_ASSIGN_ROLE": "Failed to assign role :("
+}

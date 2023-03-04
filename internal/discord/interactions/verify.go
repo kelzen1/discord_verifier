@@ -3,6 +3,7 @@ package interactions
 import (
 	"context"
 	"database/sql"
+	"github.com/yoonaowo/discord_verifier/internal/translations"
 
 	"github.com/andersfylling/disgord"
 
@@ -15,13 +16,13 @@ import (
 var (
 	verifyDefinition = &disgord.CreateApplicationCommand{
 		Name:        "verify",
-		Description: "Get User Role",
+		Description: translations.Get("VERIFY_DEF_DESCRIPTION"),
 		Options: []*disgord.ApplicationCommandOption{
 			{
 				Required:    true,
-				Name:        "code",
+				Name:        translations.Get("VERIFY_DEF_OPT_NAME"),
 				Type:        disgord.OptionTypeString,
-				Description: "Verify Code",
+				Description: translations.Get("VERIFY_DEF_OPT_DESCRIPTION"),
 			},
 		},
 	}
@@ -34,8 +35,8 @@ var (
 		Data: &disgord.CreateInteractionResponseData{
 			Embeds: []*disgord.Embed{
 				{
-					Title:       "Aww, something went wrong!~",
-					Description: "Unknown Error.",
+					Title:       translations.Get("SOMETHING_WENT_WRONG"),
+					Description: translations.Get("UNK_ERROR"),
 				},
 			},
 			Flags: disgord.MessageFlagEphemeral,
@@ -46,8 +47,8 @@ var (
 		Data: &disgord.CreateInteractionResponseData{
 			Embeds: []*disgord.Embed{
 				{
-					Title:       "Done!",
-					Description: "Role given!",
+					Title:       translations.Get("VERIFY_DONE_TITLE"),
+					Description: translations.Get("VERIFY_DONE_DESCRIPTION"),
 				},
 			},
 			Flags: disgord.MessageFlagEphemeral,
@@ -63,7 +64,7 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	}()
 
 	if len(interactionCreate.Data.Options) == 0 {
-		answer.Data.Embeds[0].Description = "Bad Arguments!"
+		answer.Data.Embeds[0].Description = translations.Get("BAD_ARGUMENTS") // never reached?
 		return
 	}
 
@@ -74,12 +75,12 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	UserID := interactionCreate.Member.UserID.String()
 
 	if err == sql.ErrNoRows {
-		answer.Data.Embeds[0].Description = "Code not found :("
+		answer.Data.Embeds[0].Description = translations.Get("CODE_NOT_FOUND")
 		return
 	}
 
 	if codeData.Used && codeData.UsedBy != UserID {
-		answer.Data.Embeds[0].Description = "Code already used :("
+		answer.Data.Embeds[0].Description = translations.Get("CODE_ALREADY_USED")
 		return
 	}
 
@@ -90,7 +91,7 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	if err != nil {
 
 		if err == sql.ErrNoRows {
-			answer.Data.Embeds[0].Description = "Role not found in database. Please contact administrator!"
+			answer.Data.Embeds[0].Description = translations.Get("ROLE_NOT_FOUND_CONTACT_ADMIN")
 		}
 
 		return
@@ -101,7 +102,7 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	err = client.Guild(interactionCreate.GuildID).Member(interactionCreate.Member.UserID).AddRole(assignRoleSnowflake)
 	if err != nil {
 		utils.Logger().Println("failed to assign role ->", err)
-		answer.Data.Embeds[0].Description = "Failed to assign role :("
+		answer.Data.Embeds[0].Description = translations.Get("FAILED_TO_ASSIGN_ROLE")
 		return
 	}
 

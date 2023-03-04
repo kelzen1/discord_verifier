@@ -2,6 +2,7 @@ package interactions
 
 import (
 	"github.com/andersfylling/disgord"
+	"github.com/yoonaowo/discord_verifier/internal/translations"
 
 	"github.com/yoonaowo/discord_verifier/internal/models"
 	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
@@ -46,8 +47,8 @@ var failedResponse = &disgord.CreateInteractionResponse{
 	Data: &disgord.CreateInteractionResponseData{
 		Embeds: []*disgord.Embed{
 			{
-				Title:       "Error",
-				Description: "Aww, something went wrong!~",
+				Title:       translations.Get("ERROR"),
+				Description: translations.Get("SOMETHING_WENT_WRONG"),
 			},
 		},
 	},
@@ -74,7 +75,7 @@ func Setup(client *disgord.Client) {
 	GuildID, err := disgord.GetSnowflake(os.Getenv("DISCORD_GUILD"))
 
 	if err != nil {
-		utils2.Logger().Panicln("get snowflake interactions ->", err)
+		utils2.Logger().Fatalln("get snowflake interactions ->", err)
 		return
 	}
 
