@@ -15,6 +15,7 @@ var jsonData []byte
 var (
 	langs map[string]string
 	once  sync.Once
+	mutex sync.Mutex
 )
 
 func onceFunc() {
@@ -27,6 +28,10 @@ func onceFunc() {
 }
 
 func Get(text string) string {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	once.Do(onceFunc)
 
 	res, found := langs[text]
