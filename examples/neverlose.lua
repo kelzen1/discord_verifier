@@ -1,4 +1,3 @@
-
 local verifier_secret_key = "random_secret_password"
 local verifier_server_url = "http://localhost:40002/verify"
 local verifier = (function(server_url, secret_key)
