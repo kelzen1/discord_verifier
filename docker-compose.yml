@@ -45,7 +45,7 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    image: elleqt/verifier:latest
+    image: verifier:latest
     restart: always
     expose:
       - "40002"
