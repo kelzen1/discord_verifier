@@ -35,36 +35,33 @@ Answer will be send also in JSON
 
 ![image](https://user-images.githubusercontent.com/126272940/221438077-5fae0784-c212-41df-baaa-275681f6eef5.png)
 
-#### SECRET
+- #### SECRET
+  - The secret key with which the signature will be generated can be any string
 
-The secret key with which the signature will be generated can be any string
 
-#### DB_URL
+- #### DB_URL
+  - URL for database. Currently only mariadb supported
+  - Example: `root:123456@tcp(localhost:40002)/verifier`
 
-URL for database. Currently only mariadb supported
-Example: `root:123456@tcp(localhost:40002)/verifier`
+- #### DISCORD_TOKEN
+  - Discord bot token
 
-#### DISCORD_TOKEN
-
-Discord bot token
-
-#### DISCORD_GUILD
-
-Discord server id
+- #### DISCORD_GUILD
+  - Discord server id
 
 # Installation steps
 
-#### 1. Install [Docker](https://docs.docker.com/engine/install/)
+1. Install [Docker](https://docs.docker.com/engine/install/)
 
-#### 2. Download & Open project directory in terminal and write `docker build . -t verifier:latest`
+2. Download & Open project directory in terminal and write `docker build . -t verifier:latest`
 
-#### 3. Edit passwords and etc in docker-compose.yml
+3. Edit passwords and etc in docker-compose.yml
 
-#### 4. `docker compose up -d` (PHPMyAdmin will be installed too)
+4. `docker compose up -d` (PHPMyAdmin will be installed too)
 
-#### 5. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
+5. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
 
-#### REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint\cURL example:
+REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint\cURL example:
 
 ```BASH
 curl --location 'http://localhost:40002/verify' \
