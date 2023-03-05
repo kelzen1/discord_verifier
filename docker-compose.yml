@@ -20,6 +20,11 @@ services:
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init-script.sql
       - mariadb:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 1s
+      timeout: 1s
+      retries: 30
     networks:
       db:
 
@@ -38,7 +43,8 @@ services:
       db:
   verifier:
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     image: verifier:latest
     restart: always
     expose:
