@@ -61,8 +61,7 @@ Answer will be send also in JSON
 
 5. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
 
-REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint\cURL example:
-
+REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint
 ```BASH
 curl --location 'http://localhost:40002/verify' \
 --header 'Content-Type: application/json' \
