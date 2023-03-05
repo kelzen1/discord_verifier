@@ -1,4 +1,4 @@
-name: Staticcheck
+name: Go
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
 
   staticcheck:
+    name: Linters (Static Analysis) for Go
     strategy:
       fail-fast: false
       matrix:

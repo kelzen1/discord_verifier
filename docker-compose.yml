@@ -16,8 +16,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     expose:
-      - "40000"
-    ports:
       - "40000:3306"
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init-script.sql
@@ -49,7 +47,7 @@ services:
       - "40002:80"
     environment:
       - DB_URL=root:123456@tcp(db:3306)/verifier
-      - DISCORD_GUILD=guild
+      - DISCORD_GUILD=server_id
       - DISCORD_TOKEN=token
       - SECRET=random_secret_password
     networks:
