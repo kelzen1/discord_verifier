@@ -49,17 +49,15 @@ Answer will be send also in JSON
 - #### DISCORD_GUILD
   - Discord server id
 
-# Installation steps
+# Installation steps (Auto, Docker)
 
 1. Install [Docker](https://docs.docker.com/engine/install/)
 
-2. Download & Open project directory in terminal and write `docker build . -t verifier:latest`
+2. Edit passwords and etc in docker-compose.yml
 
-3. Edit passwords and etc in docker-compose.yml
+3. In terminal with folder containing compose file write `docker compose up -d` (PHPMyAdmin will be installed too)
 
-4. `docker compose up -d` (PHPMyAdmin will be installed too)
-
-5. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
+4. Add roles in `roles` table. `name` field is field for role name f.e. `release`, `role` field is for role discord id
 
 REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint
 ```BASH
