@@ -1,9 +1,9 @@
 package database
 
 import (
-	databaseTables2 "github.com/yoonaowo/discord_verifier/internal/models/database"
-	restModels "github.com/yoonaowo/discord_verifier/internal/models/rest"
-	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+	"github.com/yoonaowo/discord_verifier/internal/models/database"
+	"github.com/yoonaowo/discord_verifier/internal/models/rest"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"database/sql"
 	"gorm.io/driver/mysql"
@@ -25,7 +25,7 @@ var (
 )
 
 func initOnce() {
-	utils2.Logger().Println("connecting to database")
+	utils.Logger().Println("connecting to database")
 
 	databaseUrl := os.Getenv("DB_URL")
 
@@ -33,11 +33,11 @@ func initOnce() {
 	dbStruct.raw = db
 
 	if err != nil {
-		utils2.Logger().Panicln("cannot connect to database:", err)
+		utils.Logger().Panicln("cannot connect to database:", err)
 		return
 	}
 
-	utils2.Logger().Println("database connected")
+	utils.Logger().Println("database connected")
 }
 
 // Get singleton
@@ -54,7 +54,7 @@ func Get() T {
 func (dbT *T) GetRoleID(roleName string) (string, error) {
 	db := dbT.raw.Table("roles")
 
-	roleData := databaseTables2.Roles{}
+	roleData := databaseTables.Roles{}
 	res := db.Where("name = ?", roleName).Limit(1).Find(&roleData)
 
 	err := res.Error
@@ -66,8 +66,8 @@ func (dbT *T) GetRoleID(roleName string) (string, error) {
 	return roleData.Role, err
 }
 
-func (dbT *T) GetCodeInfo(code string) (databaseTables2.Codes, error) {
-	var dest databaseTables2.Codes
+func (dbT *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
+	var dest databaseTables.Codes
 	query := dbT.raw.Table("codes").Where("code = ?", code)
 	res := query.Limit(1).Find(&dest)
 
@@ -82,9 +82,9 @@ func (dbT *T) GetCodeInfo(code string) (databaseTables2.Codes, error) {
 func (dbT *T) CreateOrGetCode(receiver *restModels.VerifyReceiver) (string, error) {
 	db := dbT.raw.Table("codes")
 
-	code := utils2.HashMD5(receiver.Username + receiver.Role)
+	code := utils.HashMD5(receiver.Username + receiver.Role)
 
-	newCodeData := &databaseTables2.Codes{
+	newCodeData := &databaseTables.Codes{
 		Code:       code,
 		Username:   receiver.Username,
 		AssignRole: receiver.Role,
@@ -95,7 +95,7 @@ func (dbT *T) CreateOrGetCode(receiver *restModels.VerifyReceiver) (string, erro
 	return code, nil
 }
 
-func (dbT *T) SetUsed(UserID string, codeData databaseTables2.Codes) {
+func (dbT *T) SetUsed(UserID string, codeData databaseTables.Codes) {
 	db := dbT.raw
 
 	updateData := map[string]interface{}{
@@ -111,7 +111,7 @@ func (dbT *T) SetUsed(UserID string, codeData databaseTables2.Codes) {
 
 	db = dbT.raw.Table("users")
 
-	db.Create(&databaseTables2.Users{
+	db.Create(&databaseTables.Users{
 		Username:  codeData.Username,
 		DiscordID: UserID,
 	})

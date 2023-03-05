@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	restModels "github.com/yoonaowo/discord_verifier/internal/models/rest"
-	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+	"github.com/yoonaowo/discord_verifier/internal/models/rest"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"bytes"
 	"encoding/json"
@@ -45,14 +45,14 @@ func CheckSignature(next http.Handler) http.Handler {
 
 		delete(bodyData, "signature")
 
-		mapKeys := utils2.SortedMapKeys[string](bodyData)
+		mapKeys := utils.SortedMapKeys[string](bodyData)
 		var hashString string
 
 		for _, key := range mapKeys {
 			hashString += key + bodyData[key]
 		}
 
-		hashString = utils2.HashMD5(hashString)
+		hashString = utils.HashMD5(hashString)
 
 		if hashString != signature {
 			answer.Error = "wrong_signature"

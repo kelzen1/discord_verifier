@@ -9,7 +9,7 @@ import (
 
 	"github.com/yoonaowo/discord_verifier/internal/database"
 	"github.com/yoonaowo/discord_verifier/internal/models"
-	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
+	"github.com/yoonaowo/discord_verifier/internal/models/discord"
 	"github.com/yoonaowo/discord_verifier/internal/utils"
 )
 

@@ -5,8 +5,8 @@ import (
 	"github.com/yoonaowo/discord_verifier/internal/translations"
 
 	"github.com/yoonaowo/discord_verifier/internal/models"
-	discordModels "github.com/yoonaowo/discord_verifier/internal/models/discord"
-	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+	"github.com/yoonaowo/discord_verifier/internal/models/discord"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"context"
 	"os"
@@ -31,7 +31,7 @@ func GetInteraction(name string) (interactionData *models.Interaction, err error
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	err = utils2.ErrInteractionNotFound
+	err = utils.ErrInteractionNotFound
 
 	interaction, ok := mapInteractions[name]
 
@@ -75,13 +75,13 @@ func Setup(client *disgord.Client) {
 	GuildID, err := disgord.GetSnowflake(os.Getenv("DISCORD_GUILD"))
 
 	if err != nil {
-		utils2.Logger().Fatalln("get snowflake interactions ->", err)
+		utils.Logger().Fatalln("get snowflake interactions ->", err)
 		return
 	}
 
 	for _, interaction := range *interactions {
 		if err := client.ApplicationCommand(0).Guild(GuildID).Create(interaction.CommandDefinition); err != nil {
-			utils2.Logger().Fatalf(err.Error())
+			utils.Logger().Fatalf(err.Error())
 		}
 	}
 

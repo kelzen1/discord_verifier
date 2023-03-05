@@ -2,8 +2,8 @@ package endpoints
 
 import (
 	"github.com/yoonaowo/discord_verifier/internal/database"
-	restModels2 "github.com/yoonaowo/discord_verifier/internal/models/rest"
-	utils2 "github.com/yoonaowo/discord_verifier/internal/utils"
+	"github.com/yoonaowo/discord_verifier/internal/models/rest"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"bytes"
 	"encoding/json"
@@ -17,7 +17,7 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	r.Body.Close()
 	r.Body = io.NopCloser(bytes.NewBuffer(reqBody))
 
-	data := restModels2.VerifyAnswer{}
+	data := restModels.VerifyAnswer{}
 
 	defer func() {
 		if !data.Success {
@@ -42,12 +42,12 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utils2.CompareJSONToStruct(bodyData, restModels2.VerifyReceiver{}) {
-		data.Error = utils2.ErrStructMismatch.Error()
+	if !utils.CompareJSONToStruct(bodyData, restModels.VerifyReceiver{}) {
+		data.Error = utils.ErrStructMismatch.Error()
 		return
 	}
 
-	verifyRequest := &restModels2.VerifyReceiver{}
+	verifyRequest := &restModels.VerifyReceiver{}
 	_ = json.Unmarshal(reqBody, &verifyRequest)
 
 	db := database.Get()
