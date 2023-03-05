@@ -8,9 +8,8 @@ import (
 )
 
 var (
-	once    sync.Once
-	logger  *logrus.Logger
-	logFile *os.File
+	once   sync.Once
+	logger *logrus.Logger
 )
 
 func Logger() *logrus.Logger {
@@ -23,8 +22,6 @@ func Logger() *logrus.Logger {
 			logger.Panicln("error opening file:", err)
 		}
 
-		logFile = f
-
 		writer := io.MultiWriter(f, os.Stdout)
 		logger.SetOutput(writer)
 
@@ -35,8 +32,4 @@ func Logger() *logrus.Logger {
 	})
 
 	return logger
-}
-
-func ShutdownLogger() {
-	_ = logFile.Close()
 }
