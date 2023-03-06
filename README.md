@@ -81,7 +81,7 @@ Just use interaction `/verify` in any discord channel on ur server
 #### TODO
 - [ ] Full move to run from the docker hub
 - [ ] Remove Docker Compose
-- [ ] Creating roles not through the database
+- [ ] Some frontend(?) for role editing
 - [x] Remove MariaDB dependencies
 - [x] Using migration from GORM
 - [x] SQLite
