@@ -79,7 +79,7 @@ Just use interaction `/verify` in any discord channel on ur server
 ![image](https://user-images.githubusercontent.com/126272940/221445981-f522d105-218b-4fd4-a40e-d5b54656386c.png)
 
 #### TODO
-- [ ] Full move to run from the docker hub
+- [ ] Pulling from docker hub
 - [ ] Remove Docker Compose
 - [ ] Some frontend(?) for role editing
 - [x] Remove MariaDB dependencies
