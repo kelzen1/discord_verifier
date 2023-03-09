@@ -11,3 +11,4 @@ go.work
 verifier.log
 .idea
 verifier.db
+/data

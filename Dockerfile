@@ -2,6 +2,8 @@ FROM golang:1.20.1-alpine
 
 WORKDIR /app
 
+RUN mkdir -p data
+
 COPY go.* ./
 RUN go mod download
 

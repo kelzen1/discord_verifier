@@ -11,6 +11,8 @@ import (
 
 func main() {
 
+	_ = os.Mkdir("data", os.ModePerm)
+
 	go rest.Init()
 	go database.Get()
 	go discord.Init()

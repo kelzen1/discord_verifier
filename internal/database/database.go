@@ -7,6 +7,7 @@ import (
 	"github.com/yoonaowo/discord_verifier/internal/models/rest"
 	"github.com/yoonaowo/discord_verifier/internal/utils"
 	"gorm.io/gorm"
+	"path"
 	"sync"
 )
 
@@ -24,7 +25,7 @@ var (
 func initOnce() {
 	utils.Logger().Println("connecting to database")
 
-	db, err := gorm.Open(sqlite.Open("verifier.db"), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(path.Join("data", "verifier.db")), &gorm.Config{
 		PrepareStmt: true,
 	})
 	dbStruct.raw = db
