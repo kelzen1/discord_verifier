@@ -104,11 +104,3 @@ curl --location 'http://localhost:40002/verify' \
 Just use interaction `/verify` in any discord channel on ur server
 
 ![image](https://user-images.githubusercontent.com/126272940/221445981-f522d105-218b-4fd4-a40e-d5b54656386c.png)
-
-#### TODO
-- [ ] Pulling from docker hub
-- [ ] Remove Docker Compose
-- [ ] Some frontend(?) for role editing
-- [x] Remove MariaDB dependencies
-- [x] Using migration from GORM
-- [x] SQLite
