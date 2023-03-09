@@ -83,7 +83,7 @@ curl --location 'http://localhost:40000/admin/deleteRole' \
 docker run -p 40000:80 --name=Verifier --env=SECRET=random_secret_password --env=ADMIN_PASSWORD=123456 --env=DISCORD_GUILD=server_id --env=DISCORD_TOKEN=token --restart=always -d elleqt/verifier:latest
 ```
 
-REST is now started on port `40000` (if u not changed it in docker-compose) with `/verify` endpoint
+REST is now started on port `40000` (if you not changed it) with `/verify` endpoint
 ```BASH
 curl --location 'http://localhost:40000/verify' \
 --header 'Content-Type: application/json' \
