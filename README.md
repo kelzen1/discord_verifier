@@ -35,13 +35,13 @@ Answer will be send also in JSON
 
 #### List All Roles
 ```bash
-curl --location 'http://localhost:40002/admin/listRoles' \
+curl --location 'http://localhost:40000/admin/listRoles' \
 --header 'admin_key: 123456'
 ```
 
 #### Create OR Edit roles
 ```bash
-curl --location 'http://localhost:40002/admin/editRole' \
+curl --location 'http://localhost:40000/admin/editRole' \
 --header 'admin_key: 123456' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -52,7 +52,7 @@ curl --location 'http://localhost:40002/admin/editRole' \
 
 #### Delete Role
 ```bash
-curl --location 'http://localhost:40002/admin/deleteRole' \
+curl --location 'http://localhost:40000/admin/deleteRole' \
 --header 'admin_key: 123456' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -64,11 +64,6 @@ curl --location 'http://localhost:40002/admin/deleteRole' \
 
 - #### SECRET
   - The secret key with which the signature will be generated can be any string
-
-
-- #### DB_URL
-  - URL for database. Currently only mariadb supported
-  - Example: `root:123456@tcp(localhost:40002)/verifier`
 
 - #### DISCORD_TOKEN
   - Discord bot token
@@ -85,12 +80,12 @@ curl --location 'http://localhost:40002/admin/deleteRole' \
 
 2. Run docker run. Do not forget to change tokens and passwords.
 ```bash
-docker run --name=Verifier --env=SECRET=random_secret_password --env=ADMIN_PASSWORD=123456 --env=DISCORD_GUILD=server_id --env=DISCORD_TOKEN=token --restart=always -d elleqt/verifier:latest 
+docker run -p 40000:80 --name=Verifier --env=SECRET=random_secret_password --env=ADMIN_PASSWORD=123456 --env=DISCORD_GUILD=server_id --env=DISCORD_TOKEN=token --restart=always -d elleqt/verifier:latest
 ```
 
-REST is now started on port `40002` (if u not changed it in docker-compose) with `/verify` endpoint
+REST is now started on port `40000` (if u not changed it in docker-compose) with `/verify` endpoint
 ```BASH
-curl --location 'http://localhost:40002/verify' \
+curl --location 'http://localhost:40000/verify' \
 --header 'Content-Type: application/json' \
 --data '{
     "signature": "9ce8d820f543c5a68f214da51cdad84b",
