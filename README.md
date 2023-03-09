@@ -80,7 +80,7 @@ curl --location 'http://localhost:40000/admin/deleteRole' \
 
 2. Run docker run. Do not forget to change tokens and passwords.
 ```bash
-docker run -p 40000:80 --name=Verifier --env=SECRET=random_secret_password --env=ADMIN_PASSWORD=123456 --env=DISCORD_GUILD=server_id --env=DISCORD_TOKEN=token --restart=always -d elleqt/verifier:latest
+docker run -p 40000:80 --name=Verifier --env=SECRET=random_secret_password --env=ADMIN_PASSWORD=123456 --env=DISCORD_GUILD=server_id --env=DISCORD_TOKEN=token --mount source=Verifier,target=/app --restart=always -d elleqt/verifier:latest
 ```
 
 REST is now started on port `40000` (if you not changed it) with `/verify` endpoint
