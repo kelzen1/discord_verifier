@@ -1,11 +1,10 @@
 package middlewares
 
 import (
-	"github.com/yoonaowo/discord_verifier/internal/models/rest"
-	"github.com/yoonaowo/discord_verifier/internal/utils"
-
 	"bytes"
 	"encoding/json"
+	"github.com/yoonaowo/discord_verifier/internal/models/rest"
+	"github.com/yoonaowo/discord_verifier/internal/utils"
 	"io"
 	"net/http"
 )
@@ -52,7 +51,7 @@ func CheckSignature(next http.Handler) http.Handler {
 			hashString += key + bodyData[key]
 		}
 
-		hashString = utils.HashMD5(hashString)
+		hashString = utils.HashMD5(hashString + utils.FlagSecretPassword)
 
 		if hashString != signature {
 			answer.Error = "wrong_signature"

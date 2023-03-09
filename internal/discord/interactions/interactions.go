@@ -9,7 +9,6 @@ import (
 	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"context"
-	"os"
 	"sync"
 )
 
@@ -72,7 +71,7 @@ func Handle(session disgord.Session, interactionCreate *disgord.InteractionCreat
 func Setup(client *disgord.Client) {
 	AddInteraction(verifyStruct)
 
-	GuildID, err := disgord.GetSnowflake(os.Getenv("DISCORD_GUILD"))
+	GuildID, err := disgord.GetSnowflake(utils.FlagDiscordGuild)
 
 	if err != nil {
 		utils.Logger().Fatalln("get snowflake interactions ->", err)

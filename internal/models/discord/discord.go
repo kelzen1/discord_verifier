@@ -5,7 +5,6 @@ import (
 
 	"github.com/yoonaowo/discord_verifier/internal/utils"
 
-	"os"
 	"sync"
 )
 
@@ -18,7 +17,7 @@ var (
 func GetClient() *disgord.Client {
 	once.Do(func() {
 		client = disgord.New(disgord.Config{
-			BotToken: os.Getenv("DISCORD_TOKEN"),
+			BotToken: utils.FlagDiscordToken,
 			Logger:   utils.Logger(),
 		})
 	})

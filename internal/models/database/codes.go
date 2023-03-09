@@ -1,8 +1,11 @@
 package databaseTables
 
+import "gorm.io/gorm"
+
 type Codes struct {
-	ID         int    `json:"id"`
-	Code       string `json:"code"`
+	gorm.Model
+	ID         int    `json:"id" gorm:"primaryKey"`
+	Code       string `json:"code" gorm:"unique"`
 	Username   string `json:"username"`
 	AssignRole string `json:"assign_role"`
 	Used       bool   `json:"used"`

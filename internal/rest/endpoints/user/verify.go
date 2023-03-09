@@ -1,4 +1,4 @@
-package endpoints
+package userEndpoints
 
 import (
 	"github.com/yoonaowo/discord_verifier/internal/database"
@@ -27,30 +27,27 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	reqBody, err := io.ReadAll(r.Body)
-
+	bodyData, err := utils.ReadRequestBodyMap[string, any](r.Body)
 	if err != nil {
 		data.Error = err.Error()
 		return
 	}
 
-	bodyData := make(map[string]any)
-	err = json.Unmarshal(reqBody, &bodyData)
-
-	if err != nil {
-		data.Error = err.Error()
-		return
-	}
-
-	if !utils.CompareJSONToStruct(bodyData, restModels.VerifyReceiver{}) {
+	verifyRequest, ok := utils.CastAndCompare[restModels.VerifyReceiver](bodyData)
+	if !ok {
 		data.Error = utils.ErrStructMismatch.Error()
 		return
 	}
 
-	verifyRequest := &restModels.VerifyReceiver{}
-	_ = json.Unmarshal(reqBody, &verifyRequest)
-
 	db := database.Get()
+
+	_, err = db.GetRoleID(verifyRequest.Role)
+
+	if err != nil {
+		data.Error = utils.ErrRoleNotFound.Error()
+		return
+	}
+
 	data.Code, err = db.CreateOrGetCode(verifyRequest)
 
 	if err != nil {

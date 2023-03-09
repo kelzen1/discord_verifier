@@ -1,15 +1,12 @@
 package database
 
 import (
+	"database/sql"
+	"github.com/glebarez/sqlite"
 	"github.com/yoonaowo/discord_verifier/internal/models/database"
 	"github.com/yoonaowo/discord_verifier/internal/models/rest"
 	"github.com/yoonaowo/discord_verifier/internal/utils"
-
-	"database/sql"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-
-	"os"
 	"sync"
 )
 
@@ -27,13 +24,19 @@ var (
 func initOnce() {
 	utils.Logger().Println("connecting to database")
 
-	databaseUrl := os.Getenv("DB_URL")
-
-	db, err := gorm.Open(mysql.Open(databaseUrl), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("verifier.db"), &gorm.Config{
+		PrepareStmt: true,
+	})
 	dbStruct.raw = db
 
 	if err != nil {
 		utils.Logger().Panicln("cannot connect to database:", err)
+		return
+	}
+
+	err = db.AutoMigrate(&databaseTables.Codes{}, &databaseTables.Roles{}, &databaseTables.Users{})
+	if err != nil {
+		utils.Logger().Panicln("cannot migrate database:", err)
 		return
 	}
 
@@ -51,11 +54,10 @@ func Get() T {
 	return dbStruct
 }
 
-func (dbT *T) GetRoleID(roleName string) (string, error) {
-	db := dbT.raw.Table("roles")
+func (db *T) GetRoleID(roleName string) (string, error) {
 
 	roleData := databaseTables.Roles{}
-	res := db.Where("name = ?", roleName).Limit(1).Find(&roleData)
+	res := db.raw.Where(&databaseTables.Roles{Name: roleName}).Limit(1).Find(&roleData) // lifehack to prevent console spam caused by gorm
 
 	err := res.Error
 
@@ -66,10 +68,9 @@ func (dbT *T) GetRoleID(roleName string) (string, error) {
 	return roleData.Role, err
 }
 
-func (dbT *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
+func (db *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
 	var dest databaseTables.Codes
-	query := dbT.raw.Table("codes").Where("code = ?", code)
-	res := query.Limit(1).Find(&dest)
+	res := db.raw.Where(&databaseTables.Codes{Code: code}).Limit(1).Find(&dest)
 
 	err := res.Error
 	if err == nil && res.RowsAffected == 0 {
@@ -79,8 +80,7 @@ func (dbT *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
 	return dest, err
 }
 
-func (dbT *T) CreateOrGetCode(receiver *restModels.VerifyReceiver) (string, error) {
-	db := dbT.raw.Table("codes")
+func (db *T) CreateOrGetCode(receiver restModels.VerifyReceiver) (string, error) {
 
 	code := utils.HashMD5(receiver.Username + receiver.Role)
 
@@ -90,28 +90,23 @@ func (dbT *T) CreateOrGetCode(receiver *restModels.VerifyReceiver) (string, erro
 		AssignRole: receiver.Role,
 	}
 
-	db.Where("code = ?", code).FirstOrCreate(&newCodeData)
+	db.raw.FirstOrCreate(&databaseTables.Codes{}, &newCodeData)
 
 	return code, nil
 }
 
-func (dbT *T) SetUsed(UserID string, codeData databaseTables.Codes) {
-	db := dbT.raw
+func (db *T) SetUsed(UserID string, codeData databaseTables.Codes) {
 
-	updateData := map[string]interface{}{
-		"used":    true,
-		"used_by": UserID,
-	}
-
-	db.Table("codes").Where("code = ?", codeData.Code).Updates(updateData)
+	db.raw.Where(databaseTables.Codes{Code: codeData.Code}).Updates(databaseTables.Codes{
+		Used:   true,
+		UsedBy: UserID,
+	})
 
 	if codeData.Username == "unknown" {
 		return
 	}
 
-	db = dbT.raw.Table("users")
-
-	db.Create(&databaseTables.Users{
+	db.raw.Create(&databaseTables.Users{
 		Username:  codeData.Username,
 		DiscordID: UserID,
 	})

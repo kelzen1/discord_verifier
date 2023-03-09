@@ -18,21 +18,18 @@ var (
 	mutex sync.Mutex
 )
 
-func onceFunc() {
-	err := json.Unmarshal(jsonData, &langs)
-
-	if err != nil {
-		utils.Logger().Fatalln("Failed to setup translations")
-	}
-
-}
-
 func Get(text string) string {
 
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	once.Do(onceFunc)
+	once.Do(func() {
+		err := json.Unmarshal(jsonData, &langs)
+
+		if err != nil {
+			utils.Logger().Fatalln("Failed to setup translations")
+		}
+	})
 
 	res, found := langs[text]
 

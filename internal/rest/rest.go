@@ -2,25 +2,41 @@ package rest
 
 import (
 	"github.com/go-chi/chi/v5"
-
-	"github.com/yoonaowo/discord_verifier/internal/rest/endpoints"
+	adminEndpoints "github.com/yoonaowo/discord_verifier/internal/rest/endpoints/admin"
+	userEndpoints "github.com/yoonaowo/discord_verifier/internal/rest/endpoints/user"
 	"github.com/yoonaowo/discord_verifier/internal/rest/middlewares"
 	"github.com/yoonaowo/discord_verifier/internal/utils"
 
 	"net/http"
 )
 
+func userRouter() chi.Router {
+	router := chi.NewRouter()
+	router.Use(middlewares.CheckSignature)
+
+	router.Post("/verify", userEndpoints.Verify)
+
+	return router
+}
+
+func adminRouter() chi.Router {
+	router := chi.NewRouter()
+	router.Use(middlewares.CheckAdminToken)
+
+	router.Post("/editRole", adminEndpoints.EditRole)
+	router.Post("/deleteRole", adminEndpoints.DeleteRole)
+	router.Get("/listRoles", adminEndpoints.ListRoles)
+
+	return router
+}
+
 func handleRequests() {
 
-	myRouter := chi.NewRouter()
+	mainRouter := chi.NewRouter()
+	mainRouter.Mount("/", userRouter())
+	mainRouter.Mount("/admin", adminRouter())
 
-	myRouter.Use(middlewares.CheckSignature)
-	myRouter.Post("/verify", endpoints.Verify)
-
-	go func() {
-		utils.Logger().Fatalln(http.ListenAndServe(":80", myRouter))
-	}()
-
+	go utils.Logger().Fatalln(http.ListenAndServe(":80", mainRouter))
 }
 
 func Init() {
