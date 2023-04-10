@@ -1,5 +1,5 @@
 local verifier_secret_key = "random_secret_password"
-local verifier_server_url = "http://localhost:40002/verify"
+local verifier_server_url = "http://localhost:40000/verify"
 local verifier = (function(server_url, secret_key)
 
     local md5 = require "neverlose/md5"
