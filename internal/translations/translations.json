@@ -1,15 +1,15 @@
 {
   "ERROR": "Error",
-  "SOMETHING_WENT_WRONG": "Something went wrong",
+  "SOMETHING_WENT_WRONG": "Uups, something went wrong",
   "UNK_ERROR": "Unknown error!",
-  "VERIFY_DEF_DESCRIPTION": "Get User Role",
+  "VERIFY_DEF_DESCRIPTION": "Get your user role - stability.lua",
   "VERIFY_DEF_OPT_NAME": "code",
-  "VERIFY_DEF_OPT_DESCRIPTION": "Verify Code",
-  "VERIFY_DONE_TITLE": "Done!",
-  "VERIFY_DONE_DESCRIPTION": "Role given!",
-  "BAD_ARGUMENTS": "Bad arguments!",
-  "CODE_NOT_FOUND": "Code not found",
+  "VERIFY_DEF_OPT_DESCRIPTION": "Verify code",
+  "VERIFY_DONE_TITLE": "Congratulations!",
+  "VERIFY_DONE_DESCRIPTION": "You got the role depending on which script version you use!",
+  "BAD_ARGUMENTS": "You cannot use this arguments!",
+  "CODE_NOT_FOUND": "The code could not be found, make sure you copied it correctly.",
   "CODE_ALREADY_USED": "Code already used",
-  "ROLE_NOT_FOUND_CONTACT_ADMIN": "Role not found in database. Please contact administrator!",
-  "FAILED_TO_ASSIGN_ROLE": "Failed to assign role"
+  "ROLE_NOT_FOUND_CONTACT_ADMIN": "Error: role not found, create a ticket if problem persist.",
+  "FAILED_TO_ASSIGN_ROLE": "Error: failed to assign a specific role, create a ticket if problem persist."
 }
