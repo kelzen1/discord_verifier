@@ -82,19 +82,19 @@ func (db *T) GetCodeInfo(code string) (databaseTables.Codes, error) {
 }
 
 func (db *T) CreateOrGetCode(receiver restModels.VerifyReceiver) (string, error) {
+    utils.Logger().Println("new code ->", "username:", receiver.Username, "role:", receiver.Role)
+    code := utils.HashMD5(receiver.Username + receiver.Role)
 
-	code := utils.HashMD5(receiver.Username + receiver.Role)
+    newCodeData := &databaseTables.Codes{
+        Code:       code,
+        Username:   receiver.Username,
+        AssignRole: receiver.Role,
+    }
 
-	newCodeData := &databaseTables.Codes{
-		Code:       code,
-		Username:   receiver.Username,
-		AssignRole: receiver.Role,
-	}
+    db.raw.FirstOrCreate(&databaseTables.Codes{}, &newCodeData)
 
-	db.raw.FirstOrCreate(&databaseTables.Codes{}, &newCodeData)
-
-	return code, nil
-}
+    return code, nil
+} //log all usernames role code
 
 func (db *T) SetUsed(UserID string, codeData databaseTables.Codes) {
 
