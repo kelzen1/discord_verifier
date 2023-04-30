@@ -36,7 +36,7 @@ func handleRequests() {
 	mainRouter.Mount("/", userRouter())
 	mainRouter.Mount("/admin", adminRouter())
 
-	go utils.Logger().Fatalln(http.ListenAndServe(":80", mainRouter))
+	go utils.Logger().Fatalln(http.ListenAndServe(":"+utils.FlagWebPort, mainRouter))
 }
 
 func Init() {
