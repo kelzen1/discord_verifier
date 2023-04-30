@@ -14,7 +14,7 @@ func userRouter() chi.Router {
 	router := chi.NewRouter()
 	router.Use(middlewares.CheckSignature)
 
-	router.Post("/verify", userEndpoints.Verify)
+	router.Post("/check_verification", userEndpoints.Verify)
 
 	return router
 }
@@ -23,9 +23,9 @@ func adminRouter() chi.Router {
 	router := chi.NewRouter()
 	router.Use(middlewares.CheckAdminToken)
 
-	router.Post("/editRole", adminEndpoints.EditRole)
-	router.Post("/deleteRole", adminEndpoints.DeleteRole)
-	router.Get("/listRoles", adminEndpoints.ListRoles)
+	router.Post("/role_editor", adminEndpoints.EditRole)
+	router.Post("/role_delete", adminEndpoints.DeleteRole)
+	router.Get("/role_list", adminEndpoints.ListRoles)
 
 	return router
 }
@@ -34,7 +34,7 @@ func handleRequests() {
 
 	mainRouter := chi.NewRouter()
 	mainRouter.Mount("/", userRouter())
-	mainRouter.Mount("/admin", adminRouter())
+	mainRouter.Mount("/superpower", adminRouter())
 
 	go utils.Logger().Fatalln(http.ListenAndServe(":"+utils.FlagWebPort, mainRouter))
 }
