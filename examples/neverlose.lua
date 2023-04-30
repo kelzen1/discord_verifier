@@ -27,12 +27,12 @@ local verifier = (function(server_url, secret_key)
 
     function get_code(username, role, callback)
         if request_count >= MAX_REQUEST_COUNT and common.get_unixtime() - last_request_time < REQUEST_INTERVAL then
-            print_raw("Too many requests, please try again later.\n\You can request a new code after: " .. REQUEST_INTERVAL .. " seconds")
+            print_raw("Too many requests, please try again later.\nYou can request a new code after: " .. REQUEST_INTERVAL .. " seconds")
             return
         end
 
         if last_request_time ~= 0 and common.get_unixtime() - last_request_time < REQUEST_INTERVAL then
-            print_raw("Too many requests, please try again later.\n\You can request a new code after: " .. REQUEST_INTERVAL .. " seconds")
+            print_raw("Too many requests, please try again later.\nYou can request a new code after: " .. REQUEST_INTERVAL .. " seconds")
             return
         end
         
