@@ -73,10 +73,11 @@ func verify(_ disgord.Session, interactionCreate *disgord.InteractionCreate) {
 	UserID := interactionCreate.Member.UserID.String()
 
 	if err == sql.ErrNoRows {
-		answer.Data.Embeds[0].Description = translations.Get("CODE_NOT_FOUND")
-		return
-	}
-
+	    answer.Data.Embeds[0].Description = translations.Get("CODE_NOT_FOUND")
+	    utils.Logger().Println("Code '%s' not found in db. User: %s\n", code, UserID)
+	    return
+	}	
+	
 	if codeData.Used && codeData.UsedBy != UserID {
 		answer.Data.Embeds[0].Description = translations.Get("CODE_ALREADY_USED")
 		return
